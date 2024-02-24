@@ -4,6 +4,7 @@ version = "1.0-SNAPSHOT"
 plugins {
     id("java")
     application
+    checkstyle
 }
 
 application {
