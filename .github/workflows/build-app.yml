@@ -26,3 +26,6 @@ jobs:
       - name: Run checkstyle
         working-directory: ./app
         run: make lint
+
+      - name: Run tests
+        run: make test
