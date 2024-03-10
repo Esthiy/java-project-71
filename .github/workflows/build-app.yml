@@ -35,6 +35,10 @@ jobs:
         working-directory: ./app
         run: make report
 
+      - name: Setup Code Climate test-reporter
+        run: curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-arm64 > ./cc-test-reporter
+                        chmod +x ./cc-test-reporter
+
       - name: Set jacoco.xml path for code climate
         working-directory: ./app
         run: JACOCO_SOURCE_PATH=src/main/java ./cc-test-reporter format-coverage ./build/reports/jacoco/test/jacocoTestReport.xml --input-type jacoco
