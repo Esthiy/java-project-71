@@ -28,11 +28,17 @@ jobs:
         run: make lint
 
   test:
+    needs: [ build ]
     runs-on: ubuntu-latest
     steps:
       - name: Run tests
         working-directory: ./app
         run: make test
+
+      - name: Run test coverage
+        working-directory: ./app
+        run: make report
+
 
   coverage:
     needs: [ test ]
@@ -41,3 +47,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: paambaati/codeclimate-action@v2.2.4
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.TEST_COVERAGE_ID }}
+        with:
+          coverageCommand: yarn coverage

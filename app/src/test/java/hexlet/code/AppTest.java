@@ -9,15 +9,17 @@ import java.io.FileNotFoundException;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
-public class DifferTest {
+public class AppTest {
 
     private static final String FILE_PATH_1 = "./src/test/resources/file1.json";
     private static final String FILE_PATH_2 = "./src/test/resources/file2.json";
+    private static final String FORMAT = "stylish";
 
     @Test
     @DisplayName("Check two existing json files")
     void differPositiveTest() throws Exception {
-        var actual = Differ.generate(FILE_PATH_1, FILE_PATH_2);
+        var application = new App(FILE_PATH_1, FILE_PATH_2, FORMAT);
+        var actual = application.call();
         String expected = """
                 {
                   - follow: false
@@ -34,7 +36,8 @@ public class DifferTest {
     @Test
     @DisplayName("Check same existing json files")
     void differSameFilesTest() throws Exception {
-        var actual = Differ.generate(FILE_PATH_1, FILE_PATH_1);
+        var application = new App(FILE_PATH_1, FILE_PATH_1, FORMAT);
+        var actual = application.call();
         String expected = """
                 {
                     follow: false
@@ -50,9 +53,8 @@ public class DifferTest {
     @DisplayName("Check non-existing json files")
     void differNonExistentFileTest() {
         var filePath = "non-existent.json";
-        var thrown = catchThrowable(
-                () -> Differ.generate(filePath, FILE_PATH_2)
-        );
+        var application = new App(filePath, FILE_PATH_1, FORMAT);
+        var thrown = catchThrowable(application::call);
         assertThat(thrown).isInstanceOf(FileNotFoundException.class);
     }
 
@@ -60,9 +62,16 @@ public class DifferTest {
     @DisplayName("Check differ with no-json file")
     void differExistentTxtFileTest() {
         var filePath = "./src/test/resources/file.txt";
-        var thrown = catchThrowable(
-                () -> Differ.generate(filePath, FILE_PATH_2)
-        );
+        var application = new App(filePath, FILE_PATH_1, FORMAT);
+        var thrown = catchThrowable(application::call);
         assertThat(thrown).isInstanceOf(JsonParseException.class);
+    }
+
+    @Test
+    @DisplayName("Check null filePath as arguments")
+    void differNullFilesTest() {
+        var application = new App();
+        var thrown = catchThrowable(application::call);
+        assertThat(thrown).isInstanceOf(NullPointerException.class);
     }
 }

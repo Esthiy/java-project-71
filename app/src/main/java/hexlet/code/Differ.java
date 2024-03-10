@@ -36,6 +36,7 @@ public class Differ {
         });
 
         result.append("}\n");
+        System.out.println(result);
         return result.toString();
     }
 
