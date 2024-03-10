@@ -1,11 +1,21 @@
 package hexlet.code;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.FileNotFoundException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Map;
 
 public class Differ {
 
-    public static String generate(Map<String, Object> fileMap1, Map<String, Object> fileMap2) {
+
+    public static String generate(String filePath1, String filePath2) throws Exception {
+        var fileMap1 = readFileIntoMap(filePath1);
+        var fileMap2 = readFileIntoMap(filePath2);
+
         var result = new StringBuilder("{\n");
         var keys = new HashSet<>(fileMap1.keySet());
         keys.addAll(fileMap2.keySet());
@@ -25,8 +35,19 @@ public class Differ {
             }
         });
 
-        result.append("}");
+        result.append("}\n");
         return result.toString();
+    }
+
+    private static Map<String, Object> readFileIntoMap(String filePath) throws Exception {
+        // Чтение файла:
+        var path = Paths.get(filePath).toAbsolutePath().normalize();
+        if (!Files.exists(path)) {
+            throw new FileNotFoundException("File '" + path + "' does not exist");
+        }
+
+        return new ObjectMapper().readValue(Files.readString(path), new TypeReference<>() {
+        });
     }
 
     private static void appendLineChanges(StringBuilder stringBuilder, char sign, String lineKey, Object lineContent) {
