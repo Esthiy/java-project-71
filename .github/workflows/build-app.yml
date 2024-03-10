@@ -10,6 +10,7 @@ jobs:
         working-directory: ./app
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+        working-directory: ../
 
       - name: Check out repository code
         uses: actions/checkout@v4
