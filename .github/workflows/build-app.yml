@@ -24,10 +24,10 @@ jobs:
           gradle-version: 8.4
 
       - name: Run checkstyleMain
-        run: ./gradlew checkstyleMain
+        run: .app/gradlew checkstyleMain
 
       - name: Run checkstyleTest
-        run: ./gradlew checkstyleTest
+        run: .app/gradlew checkstyleTest
 
       - name: Run tests
-        run: ./gradlew test
+        run: .app/gradlew test
