@@ -37,7 +37,7 @@ jobs:
 
       - name: Download Code Climate test-reporter
         working-directory: ./app
-        run: curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-arm64 > ./cc-test-reporter
+        run: curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
 
       - name: Make executable
         working-directory: ./app
