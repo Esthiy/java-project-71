@@ -32,11 +32,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Run tests
-        working-directory: ./app
         run: make test
 
       - name: Run test coverage
-        working-directory: ./app
         run: make report
 
 
