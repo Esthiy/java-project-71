@@ -5,6 +5,9 @@ on: push
 jobs:
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./app
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
 
@@ -22,7 +25,6 @@ jobs:
         uses: gradle/gradle-build-action@v3
         with:
           gradle-version: 8.4
-          build-root-directory: ./app
 
       - name: Run checkstyle
         run: make lint
