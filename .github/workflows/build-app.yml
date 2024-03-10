@@ -49,4 +49,3 @@ jobs:
       # upload coverage on code climate
       - name: Upload code climate report
         run: ./cc-test-reporter upload-coverage -r ${{ secrets.TEST_COVERAGE_ID }}
-        when: on_success
