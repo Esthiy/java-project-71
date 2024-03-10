@@ -38,8 +38,12 @@ jobs:
       - name: Download Code Climate test-reporter
         run: curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-arm64 > ./cc-test-reporter
 
-      - name: Setup Code Climate test-reporter
+      - name: Make executable
         run: chmod +x ./cc-test-reporter
+
+      - name: Debug-info
+        working-directory: ./app
+        run: ls -la
 
       - name: Set jacoco.xml path for code climate
         working-directory: ./app
