@@ -31,7 +31,6 @@ jobs:
         run: make test
 
       - name: Run test coverage
-        working-directory: ./app
         run: make report
 
       - name: Set jacoco.xml path for code climate
