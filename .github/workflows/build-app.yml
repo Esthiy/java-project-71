@@ -25,6 +25,7 @@ jobs:
 
       - run: ls -la
       - run: cd app
+      - run: ls -la
 
       - name: Run checkstyleMain
         run: make lint
