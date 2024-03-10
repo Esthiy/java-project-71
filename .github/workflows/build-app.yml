@@ -24,6 +24,7 @@ jobs:
           gradle-version: 8.4
 
       - run: cd ./app
+      - run: ls -la
 
       - name: Run checkstyleMain
         run: make lint
