@@ -23,6 +23,6 @@ jobs:
         with:
           gradle-version: 8.4
 
-      - name: Run checkstyleMain
+      - name: Run checkstyle
         working-directory: ./app
         run: make lint
