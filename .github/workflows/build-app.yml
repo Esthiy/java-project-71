@@ -45,11 +45,9 @@ jobs:
         run: make report
 
       - name: Set jacoco.xml path for code climate
-        run:
-          command: JACOCO_SOURCE_PATH=src/main/java ./cc-test-reporter format-coverage ./build/reports/jacoco/test/jacocoTestReport.xml --input-type jacoco
+        run: ACOCO_SOURCE_PATH=src/main/java ./cc-test-reporter format-coverage ./build/reports/jacoco/test/jacocoTestReport.xml --input-type jacoco
 
       # upload coverage on code climate
       - name: Upload code climate report
-      - run:
-          command: ./cc-test-reporter upload-coverage -r ${{ secrets.TEST_COVERAGE_ID }}
-          when: on_success
+        run: ./cc-test-reporter upload-coverage -r ${{ secrets.TEST_COVERAGE_ID }}
+        when: on_success
