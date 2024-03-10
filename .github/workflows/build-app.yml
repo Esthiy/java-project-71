@@ -43,10 +43,6 @@ jobs:
         working-directory: ./app
         run: chmod +x ./cc-test-reporter
 
-      - name: Debug-info
-        working-directory: ./app
-        run: ls -la
-
       - name: Set jacoco.xml path for code climate
         working-directory: ./app
         run: JACOCO_SOURCE_PATH=src/main/java ./cc-test-reporter format-coverage ./build/reports/jacoco/test/jacocoTestReport.xml --input-type jacoco
