@@ -27,15 +27,9 @@ jobs:
         working-directory: ./app
         run: make lint
 
-  test:
-    needs: [ build ]
-    steps:
       - name: Run tests
         run: make test
 
-  coverage:
-    needs: [ test ]
-    steps:
       - name: Run test coverage
         working-directory: ./app
         run: make report
@@ -43,6 +37,5 @@ jobs:
       - name: Set jacoco.xml path for code climate
         run: JACOCO_SOURCE_PATH=src/main/java ./cc-test-reporter format-coverage ./build/reports/jacoco/test/jacocoTestReport.xml --input-type jacoco
 
-      # upload coverage on code climate
       - name: Upload code climate report
         run: ./cc-test-reporter upload-coverage -r ${{ secrets.TEST_COVERAGE_ID }}
