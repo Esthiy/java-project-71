@@ -4,6 +4,8 @@ import java.util.HashSet;
 
 import static hexlet.code.ExtensionUtil.getFileExtension;
 import static hexlet.code.Parser.readFileIntoMap;
+import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 
 public class Differ {
 
@@ -25,22 +27,33 @@ public class Differ {
 
         keys.stream().sorted().forEach(key -> {
             if (fileMap1.containsKey(key) && fileMap2.containsKey(key)) {
-                if (fileMap1.get(key).equals(fileMap2.get(key))) {
-                    appendLineChanges(result, '=', key, fileMap1.get(key));
+                if (isNull(fileMap1.get(key)) & (isNull(fileMap2.get(key)))
+                        || nonNull(fileMap1.get(key)) && nonNull(fileMap2.get(key))
+                        && fileMap1.get(key).equals(fileMap2.get(key))) {
+                    var value = getValue(fileMap1.get(key));
+                    appendLineChanges(result, '=', key, value);
                 } else {
-                    appendLineChanges(result, '-', key, fileMap1.get(key));
-                    appendLineChanges(result, '+', key, fileMap2.get(key));
+                    var value1 = getValue(fileMap1.get(key));
+                    var value2 = getValue(fileMap2.get(key));
+                    appendLineChanges(result, '-', key, value1);
+                    appendLineChanges(result, '+', key, value2);
                 }
             } else if (fileMap1.containsKey(key)) {
-                appendLineChanges(result, '-', key, fileMap1.get(key));
+                var value = getValue(fileMap1.get(key));
+                appendLineChanges(result, '-', key, value);
             } else {
-                appendLineChanges(result, '+', key, fileMap2.get(key));
+                var value = getValue(fileMap2.get(key));
+                appendLineChanges(result, '+', key, value);
             }
         });
 
         result.append("}\n");
         System.out.println(result);
         return result.toString();
+    }
+
+    private static String getValue(Object objectForKey) {
+        return isNull(objectForKey) ? "null" : objectForKey.toString();
     }
 
     private static void appendLineChanges(StringBuilder stringBuilder, char sign, String lineKey, Object lineContent) {

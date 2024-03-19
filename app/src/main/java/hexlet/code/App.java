@@ -26,6 +26,11 @@ public class App implements Callable<String> {
         this.format = format;
     }
 
+    public App(String filePath1, String filePath2) {
+        this.filePath1 = filePath1;
+        this.filePath2 = filePath2;
+    }
+
     public App() {
     }
 

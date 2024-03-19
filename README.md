@@ -13,3 +13,5 @@
 [Differ json files](https://asciinema.org/a/eFkYhIZ1LxiJAPRXT9hDTibR6)
 
 Differ yaml files ![img.png](img.png)
+
+Differ files with nested values ![img_1.png](img_1.png)
