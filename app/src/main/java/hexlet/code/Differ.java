@@ -1,18 +1,21 @@
 package hexlet.code;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.io.FileNotFoundException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.HashSet;
-import java.util.Map;
+
+import static hexlet.code.ExtensionUtil.getFileExtension;
+import static hexlet.code.Parser.readFileIntoMap;
 
 public class Differ {
 
 
     public static String generate(String filePath1, String filePath2) throws Exception {
+        var extension1 = getFileExtension(filePath1);
+        var extension2 = getFileExtension(filePath2);
+
+        if (!extension1.equalsIgnoreCase(extension2)) {
+            throw new IllegalArgumentException("Files extensions are not the same");
+        }
+
         var fileMap1 = readFileIntoMap(filePath1);
         var fileMap2 = readFileIntoMap(filePath2);
 
@@ -40,23 +43,12 @@ public class Differ {
         return result.toString();
     }
 
-    private static Map<String, Object> readFileIntoMap(String filePath) throws Exception {
-        // Чтение файла:
-        var path = Paths.get(filePath).toAbsolutePath().normalize();
-        if (!Files.exists(path)) {
-            throw new FileNotFoundException("File '" + path + "' does not exist");
-        }
-
-        return new ObjectMapper().readValue(Files.readString(path), new TypeReference<>() {
-        });
-    }
-
     private static void appendLineChanges(StringBuilder stringBuilder, char sign, String lineKey, Object lineContent) {
         switch (sign) {
             case '+' -> stringBuilder.append("  + ");
             case '-' -> stringBuilder.append("  - ");
             case '=' -> stringBuilder.append("    ");
-            default -> throw new UnsupportedOperationException("Указан неверный символ");
+            default -> throw new UnsupportedOperationException("Symbol isn't used in final report");
         }
         stringBuilder.append(lineKey);
         stringBuilder.append(": ");

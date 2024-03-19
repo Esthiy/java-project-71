@@ -10,4 +10,6 @@
 
 ### Example:
 
-[Differ](https://asciinema.org/a/eFkYhIZ1LxiJAPRXT9hDTibR6)
+[Differ json files](https://asciinema.org/a/eFkYhIZ1LxiJAPRXT9hDTibR6)
+
+Differ yaml files ![img.png](img.png)
