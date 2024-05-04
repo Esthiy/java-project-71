@@ -34,7 +34,8 @@ public class Differ {
         return Formatter.toFormat(format, diffsMap);
     }
 
-    private static LinkedHashMap<String, List<Difference>> generateDiffMap(Map<String, Object> firstFileMap, Map<String, Object> secondFileMap) {
+    private static LinkedHashMap<String, List<Difference>> generateDiffMap(Map<String, Object> firstFileMap,
+                                                                           Map<String, Object> secondFileMap) {
         var diffsMap = new LinkedHashMap<String, List<Difference>>();
         var keys = new HashSet<>(firstFileMap.keySet());
         keys.addAll(secondFileMap.keySet());
