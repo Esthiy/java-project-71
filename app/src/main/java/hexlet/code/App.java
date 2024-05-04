@@ -7,6 +7,8 @@ import picocli.CommandLine.Parameters;
 
 import java.util.concurrent.Callable;
 
+import static hexlet.code.formatters.Formatter.STYLISH_FORMAT;
+
 @Command(name = "gendiff", mixinStandardHelpOptions = true, version = "gendiff 1.0",
         description = "Compares two configuration files and shows a difference.")
 public class App implements Callable<String> {
@@ -30,6 +32,7 @@ public class App implements Callable<String> {
     public App(String filePath1, String filePath2) {
         this.filePath1 = filePath1;
         this.filePath2 = filePath2;
+        format = STYLISH_FORMAT;
     }
 
     public App() {
@@ -42,6 +45,8 @@ public class App implements Callable<String> {
 
     @Override
     public String call() throws Exception {
-        return Differ.generate(filePath1, filePath2);
+        var result = Differ.generate(filePath1, filePath2, format);
+        System.out.println(result);
+        return result;
     }
 }

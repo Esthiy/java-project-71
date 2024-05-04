@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 
 import java.io.FileNotFoundException;
 
+import static hexlet.code.formatters.Formatter.PLAIN_FORMAT;
+import static hexlet.code.formatters.Formatter.STYLISH_FORMAT;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
@@ -14,12 +16,11 @@ public class AppTest {
     private static final String JSON_FILE_PATH_2 = "./src/test/resources/file2.json";
     private static final String YAML_FILE_PATH_1 = "./src/test/resources/file1.yml";
     private static final String YAML_FILE_PATH_2 = "./src/test/resources/file2.yaml";
-    private static final String FORMAT = "stylish";
 
     @Test
     @DisplayName("Check two existing json files")
     void differPositiveJsonTest() throws Exception {
-        var application = new App(JSON_FILE_PATH_1, JSON_FILE_PATH_2, FORMAT);
+        var application = new App(JSON_FILE_PATH_1, JSON_FILE_PATH_2, STYLISH_FORMAT);
         var actual = application.call();
         String expected = """
                 {
@@ -52,9 +53,32 @@ public class AppTest {
     }
 
     @Test
+    @DisplayName("Check two existing json files with plain format")
+    void differPositivePlainTest() throws Exception {
+        var application = new App(JSON_FILE_PATH_1, JSON_FILE_PATH_2, PLAIN_FORMAT);
+        var actual = application.call();
+        String expected = """
+                Property 'chars2' was updated. From [complex value] to false
+                Property 'checked' was updated. From false to true
+                Property 'default' was updated. From null to [complex value]
+                Property 'id' was updated. From 45 to null
+                Property 'key1' was removed
+                Property 'key2' was added with value: 'value2'
+                Property 'numbers2' was updated. From [complex value] to [complex value]
+                Property 'numbers3' was removed
+                Property 'numbers4' was added with value: [complex value]
+                Property 'obj1' was added with value: [complex value]
+                Property 'setting1' was updated. From 'Some value' to 'Another value'
+                Property 'setting2' was updated. From 200 to 300
+                Property 'setting3' was updated. From true to 'none'
+                """;
+        assertThat(actual).as("Differ generation result").isEqualTo(expected);
+    }
+
+    @Test
     @DisplayName("Check same existing json files")
     void differSameJsonFilesTest() throws Exception {
-        var application = new App(JSON_FILE_PATH_1, JSON_FILE_PATH_1, FORMAT);
+        var application = new App(JSON_FILE_PATH_1, JSON_FILE_PATH_1, STYLISH_FORMAT);
         var actual = application.call();
         String expected = """
                 {
@@ -113,7 +137,7 @@ public class AppTest {
     @Test
     @DisplayName("Check same existing yaml files")
     void differSameYamlFilesTest() throws Exception {
-        var application = new App(YAML_FILE_PATH_1, YAML_FILE_PATH_1, FORMAT);
+        var application = new App(YAML_FILE_PATH_1, YAML_FILE_PATH_1, STYLISH_FORMAT);
         var actual = application.call();
         String expected = """
                 {
@@ -138,7 +162,7 @@ public class AppTest {
     @DisplayName("Check non-existing json files")
     void differNonExistentFileTest() {
         var filePath = "non-existent.json";
-        var application = new App(filePath, JSON_FILE_PATH_1, FORMAT);
+        var application = new App(filePath, JSON_FILE_PATH_1, STYLISH_FORMAT);
         var thrown = catchThrowable(application::call);
         assertThat(thrown).isInstanceOf(FileNotFoundException.class);
     }
@@ -147,7 +171,7 @@ public class AppTest {
     @DisplayName("Check differ with no-json file")
     void differExistentTxtFileTest() {
         var filePath = "./src/test/resources/file.txt";
-        var application = new App(filePath, filePath, FORMAT);
+        var application = new App(filePath, filePath, STYLISH_FORMAT);
         var thrown = catchThrowable(application::call);
         assertThat(thrown).isInstanceOf(IllegalArgumentException.class);
     }
@@ -163,7 +187,7 @@ public class AppTest {
     @Test
     @DisplayName("Check differ with json and yaml file")
     void differExistentJsonYamlFilesTest() {
-        var application = new App(YAML_FILE_PATH_1, JSON_FILE_PATH_1, FORMAT);
+        var application = new App(YAML_FILE_PATH_1, JSON_FILE_PATH_1, STYLISH_FORMAT);
         var thrown = catchThrowable(application::call);
         assertThat(thrown).isInstanceOf(IllegalArgumentException.class);
     }
@@ -172,8 +196,16 @@ public class AppTest {
     @DisplayName("Check differ for file without extension")
     void differFileWithoutExtensionTest() {
         var filePathWithoutExtension = JSON_FILE_PATH_1.replace(".json", "");
-        var application = new App(JSON_FILE_PATH_1, filePathWithoutExtension, FORMAT);
+        var application = new App(JSON_FILE_PATH_1, filePathWithoutExtension, STYLISH_FORMAT);
         var thrown = catchThrowable(application::call);
         assertThat(thrown).isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    @DisplayName("Check differ with unsupported format")
+    void differFilesWithUnsupportedFormatTest() {
+        var application = new App(YAML_FILE_PATH_1, YAML_FILE_PATH_2, "test");
+        var thrown = catchThrowable(application::call);
+        assertThat(thrown).isInstanceOf(UnsupportedOperationException.class);
     }
 }
