@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import static hexlet.code.ExtensionUtil.getFileExtension;
 import static hexlet.code.Parser.readFileIntoMap;
@@ -14,40 +15,48 @@ import static java.util.Objects.nonNull;
 
 public class Differ {
 
-    public static String generate(String filePath1, String filePath2, String format) throws Exception {
-        var extension1 = getFileExtension(filePath1);
-        var extension2 = getFileExtension(filePath2);
+    public static String generate(String firstFilePath, String secondFilePath, String format) throws Exception {
+        // check extension
+        var firstFileExtension = getFileExtension(firstFilePath);
+        var secondFileExtension = getFileExtension(secondFilePath);
 
-        if (!extension1.equalsIgnoreCase(extension2)) {
+        if (!firstFileExtension.equalsIgnoreCase(secondFileExtension)) {
             throw new IllegalArgumentException("Files extensions are not the same");
         }
 
-        var fileMap1 = readFileIntoMap(filePath1);
-        var fileMap2 = readFileIntoMap(filePath2);
+        // read files
+        var firstFileMap = readFileIntoMap(firstFilePath);
+        var secondFileMap = readFileIntoMap(secondFilePath);
 
-        var diffsMap = new LinkedHashMap<String, List<Difference>>();
-        var keys = new HashSet<>(fileMap1.keySet());
-        keys.addAll(fileMap2.keySet());
-
-        keys.stream().sorted().forEach(key -> {
-            if (fileMap1.containsKey(key) && fileMap2.containsKey(key)) {
-                if (isNull(fileMap1.get(key)) & (isNull(fileMap2.get(key)))
-                        || nonNull(fileMap1.get(key)) && nonNull(fileMap2.get(key))
-                        && fileMap1.get(key).equals(fileMap2.get(key))) {
-                    diffsMap.put(key, List.of(new Difference('=', fileMap1.get(key))));
-                } else {
-                    var diffList = new ArrayList<Difference>();
-                    diffList.add(new Difference('-', fileMap1.get(key)));
-                    diffList.add(new Difference('+', fileMap2.get(key)));
-                    diffsMap.put(key, diffList);
-                }
-            } else if (fileMap1.containsKey(key)) {
-                diffsMap.put(key, List.of(new Difference('-', fileMap1.get(key))));
-            } else {
-                diffsMap.put(key, List.of(new Difference('+', fileMap2.get(key))));
-            }
-        });
+        // generate diff
+        var diffsMap = generateDiffMap(firstFileMap, secondFileMap);
 
         return Formatter.toFormat(format, diffsMap);
+    }
+
+    private static LinkedHashMap<String, List<Difference>> generateDiffMap(Map<String, Object> firstFileMap, Map<String, Object> secondFileMap) {
+        var diffsMap = new LinkedHashMap<String, List<Difference>>();
+        var keys = new HashSet<>(firstFileMap.keySet());
+        keys.addAll(secondFileMap.keySet());
+
+        keys.stream().sorted().forEach(key -> {
+            if (firstFileMap.containsKey(key) && secondFileMap.containsKey(key)) {
+                if (isNull(firstFileMap.get(key)) & (isNull(secondFileMap.get(key)))
+                        || nonNull(firstFileMap.get(key)) && nonNull(secondFileMap.get(key))
+                        && firstFileMap.get(key).equals(secondFileMap.get(key))) {
+                    diffsMap.put(key, List.of(new Difference('=', firstFileMap.get(key))));
+                } else {
+                    var diffList = new ArrayList<Difference>();
+                    diffList.add(new Difference('-', firstFileMap.get(key)));
+                    diffList.add(new Difference('+', secondFileMap.get(key)));
+                    diffsMap.put(key, diffList);
+                }
+            } else if (firstFileMap.containsKey(key)) {
+                diffsMap.put(key, List.of(new Difference('-', firstFileMap.get(key))));
+            } else {
+                diffsMap.put(key, List.of(new Difference('+', secondFileMap.get(key))));
+            }
+        });
+        return diffsMap;
     }
 }

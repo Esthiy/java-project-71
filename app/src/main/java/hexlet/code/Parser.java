@@ -9,6 +9,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Map;
 
+import static hexlet.code.ExtensionUtil.JSON;
+import static hexlet.code.ExtensionUtil.YAML;
 import static hexlet.code.ExtensionUtil.getFileExtension;
 
 public class Parser {
@@ -22,10 +24,10 @@ public class Parser {
 
         var extension = getFileExtension(path.toString());
 
-        if (SupportedFileExtension.JSON.getExtensions().contains(extension)) {
+        if (JSON.contains(extension)) {
             return new ObjectMapper().readValue(Files.readString(path), new TypeReference<>() {
             });
-        } else if (SupportedFileExtension.YAML.getExtensions().contains(extension)) {
+        } else if (YAML.contains(extension)) {
             return new YAMLMapper().readValue(Files.readString(path), new TypeReference<>() {
             });
         } else {
