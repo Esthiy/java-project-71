@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Locale;
 
 public class ExtensionUtil {
-    public static final List<String> YAML = List.of(".yaml", ".yml");
-    public static final String JSON = ".json";
+    public static final List<String> YAML_EXTENSION_LIST = List.of(".yaml", ".yml");
+    public static final String JSON_EXTENSION = ".json";
 
     public static String getFileExtension(String fileName) {
         var filePath = Paths.get(fileName).toAbsolutePath().normalize().toString();
@@ -15,8 +15,8 @@ public class ExtensionUtil {
             throw new IllegalArgumentException("File without extension");
         }
         var extension = filePath.substring(lastIndexOf);
-        if (YAML.contains(extension)) {
-            return YAML.get(0);
+        if (YAML_EXTENSION_LIST.contains(extension)) {
+            return YAML_EXTENSION_LIST.get(0);
         }
         return extension.toLowerCase(Locale.ROOT);
     }
