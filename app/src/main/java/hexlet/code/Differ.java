@@ -45,17 +45,17 @@ public class Differ {
                 if (isNull(firstFileMap.get(key)) & (isNull(secondFileMap.get(key)))
                         || nonNull(firstFileMap.get(key)) && nonNull(secondFileMap.get(key))
                         && firstFileMap.get(key).equals(secondFileMap.get(key))) {
-                    diffsMap.put(key, List.of(new Difference('=', firstFileMap.get(key))));
+                    diffsMap.put(key, List.of(new Difference(null, firstFileMap.get(key))));
                 } else {
                     var diffList = new ArrayList<Difference>();
-                    diffList.add(new Difference('-', firstFileMap.get(key)));
-                    diffList.add(new Difference('+', secondFileMap.get(key)));
+                    diffList.add(new Difference(false, firstFileMap.get(key)));
+                    diffList.add(new Difference(true, secondFileMap.get(key)));
                     diffsMap.put(key, diffList);
                 }
             } else if (firstFileMap.containsKey(key)) {
-                diffsMap.put(key, List.of(new Difference('-', firstFileMap.get(key))));
+                diffsMap.put(key, List.of(new Difference(false, firstFileMap.get(key))));
             } else {
-                diffsMap.put(key, List.of(new Difference('+', secondFileMap.get(key))));
+                diffsMap.put(key, List.of(new Difference(true, secondFileMap.get(key))));
             }
         });
         return diffsMap;

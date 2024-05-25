@@ -1,5 +1,7 @@
 package hexlet.code.formatters;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import hexlet.code.Difference;
 
 import java.util.LinkedHashMap;
@@ -9,26 +11,43 @@ import static java.util.Objects.isNull;
 
 public class JsonFormatter {
 
-    protected static String toJsonFormat(LinkedHashMap<String, List<Difference>> diffs) {
-        var result = new StringBuilder("{\n");
-
-        diffs.keySet().forEach(key ->
-                diffs.get(key).forEach(it -> appendLineChanges(result, key, it.sign(), it.diffValue())));
-
-        result.append("}\n");
-        return result.toString();
+    protected static String toFormat(LinkedHashMap<String, List<Difference>> diffsMap) {
+        var jsonDiffsMap = new LinkedHashMap<String, JsonDifference>();
+        diffsMap.keySet().forEach(key -> jsonDiffsMap.put(key, new JsonDifference(diffsMap.get(key))));
+        String result;
+        try {
+            result = new ObjectMapper().writeValueAsString(jsonDiffsMap);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        return result;
     }
 
-    private static void appendLineChanges(StringBuilder stringBuilder, String keyName, char sign, Object diffValue) {
-        switch (sign) {
-            case '+' -> stringBuilder.append("  + ");
-            case '-' -> stringBuilder.append("  - ");
-            case '=' -> stringBuilder.append("    ");
-            default -> throw new UnsupportedOperationException("Symbol isn't used in final report");
+    protected static class JsonDifference {
+
+
+        private final String diffType;
+        private final List<Object> diffs;
+
+        protected JsonDifference(List<Difference> differenceList) {
+            if (differenceList.stream().anyMatch(it -> isNull(it.isLineAdded()))) {
+                diffType = "unchanged";
+            } else if (differenceList.stream().allMatch(Difference::isLineAdded)) {
+                diffType = "added";
+            } else if (differenceList.stream().noneMatch(Difference::isLineAdded)) {
+                diffType = "removed";
+            } else {
+                diffType = "changed";
+            }
+            this.diffs = differenceList.stream().map(Difference::diffValue).toList();
         }
-        stringBuilder.append(keyName);
-        stringBuilder.append(": ");
-        stringBuilder.append(isNull(diffValue) ? "null" : diffValue.toString());
-        stringBuilder.append("\n");
+
+        public String getDiffType() {
+            return diffType;
+        }
+
+        public List<Object> getDiffs() {
+            return diffs;
+        }
     }
 }

@@ -1,5 +1,5 @@
 package hexlet.code;
 
-public record Difference(Character sign, Object diffValue) {
+public record Difference(Boolean isLineAdded, Object diffValue) {
 
 }

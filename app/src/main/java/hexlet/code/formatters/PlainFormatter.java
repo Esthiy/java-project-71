@@ -9,27 +9,24 @@ import static java.util.Objects.isNull;
 
 public class PlainFormatter {
 
-    protected static String toPlainFormat(LinkedHashMap<String, List<Difference>> diffs) {
+    protected static String toFormat(LinkedHashMap<String, List<Difference>> diffs) {
         var result = new StringBuilder();
 
         diffs.keySet().forEach(key -> {
             var changesForKey = diffs.get(key);
 
             if (changesForKey.size() == 1) {
-                var sign = changesForKey.get(0).sign();
-                switch (sign) {
-                    case '+' -> {
-                        result.append(String.format("Property '%s' was added with value: %s", key,
-                                formatDiffValue(changesForKey.get(0).diffValue())));
-                        result.append("\n");
-                    }
-                    case '-' -> {
-                        result.append(String.format("Property '%s' was removed", key));
-                        result.append("\n");
-                    }
-                    case '=' -> {
-                    }
-                    default -> throw new UnsupportedOperationException("Symbol isn't used in final report");
+                var isLineAdded = changesForKey.get(0).isLineAdded();
+                if (isNull(isLineAdded)) {
+                    return;
+                }
+                if (isLineAdded) {
+                    result.append(String.format("Property '%s' was added with value: %s", key,
+                            formatDiffValue(changesForKey.get(0).diffValue())));
+                    result.append("\n");
+                } else {
+                    result.append(String.format("Property '%s' was removed", key));
+                    result.append("\n");
                 }
             } else {
                 result.append(String.format("Property '%s' was updated. From %s to %s", key,

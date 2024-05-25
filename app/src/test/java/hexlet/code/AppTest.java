@@ -4,7 +4,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.io.FileNotFoundException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
+import static hexlet.code.formatters.Formatter.JSON_FORMAT;
 import static hexlet.code.formatters.Formatter.PLAIN_FORMAT;
 import static hexlet.code.formatters.Formatter.STYLISH_FORMAT;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -16,10 +19,11 @@ public class AppTest {
     private static final String JSON_FILE_PATH_2 = "./src/test/resources/file2.json";
     private static final String YAML_FILE_PATH_1 = "./src/test/resources/file1.yml";
     private static final String YAML_FILE_PATH_2 = "./src/test/resources/file2.yaml";
+    private static final String EXPECTED_JSON_FILE_PATH = "./src/test/resources/expected.json";
 
     @Test
-    @DisplayName("Check two existing json files")
-    void differPositiveJsonTest() throws Exception {
+    @DisplayName("Check two existing json files with stylish format")
+    void differPositiveStylishTest() throws Exception {
         var application = new App(JSON_FILE_PATH_1, JSON_FILE_PATH_2, STYLISH_FORMAT);
         var actual = application.call();
         String expected = """
@@ -73,6 +77,15 @@ public class AppTest {
                 Property 'setting3' was updated. From true to 'none'
                 """;
         assertThat(actual).as("Differ generation result").isEqualTo(expected);
+    }
+
+    @Test
+    @DisplayName("Check two existing json files with json format")
+    void differPositiveJsonTest() throws Exception {
+        var application = new App(JSON_FILE_PATH_1, JSON_FILE_PATH_2, JSON_FORMAT);
+        var actual = application.call();
+        String expected = Files.readString(Paths.get(EXPECTED_JSON_FILE_PATH));
+        assertThat(actual).as("Differ generation result").isEqualToIgnoringWhitespace(expected);
     }
 
     @Test

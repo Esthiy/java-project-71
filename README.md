@@ -20,3 +20,6 @@ Differ files with nested values:
 
 Differ files with plain format:
 ![img_2.png](img_2.png)
+
+Differ files with json format:
+![img_3.png](img_3.png)
