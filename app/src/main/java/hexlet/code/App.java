@@ -7,8 +7,6 @@ import picocli.CommandLine.Parameters;
 
 import java.util.concurrent.Callable;
 
-import static hexlet.code.formatters.Formatter.STYLISH_FORMAT;
-
 @Command(name = "gendiff", mixinStandardHelpOptions = true, version = "gendiff 1.0",
         description = "Compares two configuration files and shows a difference.")
 public class App implements Callable<String> {
@@ -22,21 +20,6 @@ public class App implements Callable<String> {
     @Option(names = {"-f", "--format"}, paramLabel = "format", description = "output format [default: stylish]",
             defaultValue = "stylish")
     private String format;
-
-    public App(String filePath1, String filePath2, String format) {
-        this.filePath1 = filePath1;
-        this.filePath2 = filePath2;
-        this.format = format;
-    }
-
-    public App(String filePath1, String filePath2) {
-        this.filePath1 = filePath1;
-        this.filePath2 = filePath2;
-        format = STYLISH_FORMAT;
-    }
-
-    public App() {
-    }
 
     public static void main(String[] args) {
         int exitCode = new CommandLine(new App()).execute(args);

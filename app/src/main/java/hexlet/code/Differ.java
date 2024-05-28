@@ -10,10 +10,15 @@ import java.util.Map;
 
 import static hexlet.code.ExtensionUtil.getFileExtension;
 import static hexlet.code.Parser.readFileIntoMap;
+import static hexlet.code.formatters.Formatter.STYLISH_FORMAT;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 public class Differ {
+
+    public static String generate(String firstFilePath, String secondFilePath) throws Exception {
+        return generate(firstFilePath, secondFilePath, STYLISH_FORMAT);
+    }
 
     public static String generate(String firstFilePath, String secondFilePath, String format) throws Exception {
         // check extension
