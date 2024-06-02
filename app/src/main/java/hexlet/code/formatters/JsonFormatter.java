@@ -24,7 +24,7 @@ public class JsonFormatter {
     }
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    protected static class JsonDifference {
+    protected static final class JsonDifference {
 
         private final String key;
         private final String type;
