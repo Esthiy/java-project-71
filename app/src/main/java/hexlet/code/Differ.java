@@ -2,7 +2,7 @@ package hexlet.code;
 
 import hexlet.code.formatters.Formatter;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -15,6 +15,9 @@ import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 public class Differ {
+    public static final String UNCHANGED_DIFF = "UNCHANGED";
+    public static final String DELETED_DIFF = "DELETED";
+    public static final String ADDED_DIFF = "ADDED";
 
     public static String generate(String firstFilePath, String secondFilePath) throws Exception {
         return generate(firstFilePath, secondFilePath, STYLISH_FORMAT);
@@ -39,9 +42,10 @@ public class Differ {
         return Formatter.toFormat(format, diffsMap);
     }
 
-    private static LinkedHashMap<String, List<Difference>> generateDiffMap(Map<String, Object> firstFileMap,
-                                                                           Map<String, Object> secondFileMap) {
-        var diffsMap = new LinkedHashMap<String, List<Difference>>();
+    private static LinkedHashMap<String, List<Map<String, Object>>> generateDiffMap(Map<String, Object> firstFileMap,
+                                                                                    Map<String, Object> secondFileMap) {
+        var diffsMap = new LinkedHashMap<String, List<Map<String, Object>>>();
+
         var keys = new HashSet<>(firstFileMap.keySet());
         keys.addAll(secondFileMap.keySet());
 
@@ -50,17 +54,22 @@ public class Differ {
                 if (isNull(firstFileMap.get(key)) & (isNull(secondFileMap.get(key)))
                         || nonNull(firstFileMap.get(key)) && nonNull(secondFileMap.get(key))
                         && firstFileMap.get(key).equals(secondFileMap.get(key))) {
-                    diffsMap.put(key, List.of(new Difference(null, firstFileMap.get(key))));
+                    Map<String, Object> diffMap = new HashMap<>();
+                    diffMap.put(UNCHANGED_DIFF, firstFileMap.get(key));
+                    diffsMap.put(key, List.of(diffMap));
                 } else {
-                    var diffList = new ArrayList<Difference>();
-                    diffList.add(new Difference(false, firstFileMap.get(key)));
-                    diffList.add(new Difference(true, secondFileMap.get(key)));
-                    diffsMap.put(key, diffList);
+                    Map<String, Object> firstDiffMap = new HashMap<>();
+                    firstDiffMap.put(DELETED_DIFF, firstFileMap.get(key));
+
+                    Map<String, Object> secondDiffMap = new HashMap<>();
+                    secondDiffMap.put(ADDED_DIFF, secondFileMap.get(key));
+
+                    diffsMap.put(key, List.of(firstDiffMap, secondDiffMap));
                 }
             } else if (firstFileMap.containsKey(key)) {
-                diffsMap.put(key, List.of(new Difference(false, firstFileMap.get(key))));
+                diffsMap.put(key, List.of(Map.of(DELETED_DIFF, firstFileMap.get(key))));
             } else {
-                diffsMap.put(key, List.of(new Difference(true, secondFileMap.get(key))));
+                diffsMap.put(key, List.of(Map.of(ADDED_DIFF, secondFileMap.get(key))));
             }
         });
         return diffsMap;

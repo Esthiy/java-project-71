@@ -1,137 +1,120 @@
-{
-  "chars1": {
-    "diffType": "unchanged",
-    "diffs": [
-      [
-        "a",
-        "b",
-        "c"
-      ]
+[
+  {
+    "key": "chars1",
+    "type": "UNCHANGED",
+    "value": [
+      "a",
+      "b",
+      "c"
     ]
   },
-  "chars2": {
-    "diffType": "changed",
-    "diffs": [
-      [
-        "d",
-        "e",
-        "f"
-      ],
-      false
-    ]
+  {
+    "key": "chars2",
+    "type": "CHANGED",
+    "value1": [
+      "d",
+      "e",
+      "f"
+    ],
+    "value2": false
   },
-  "checked": {
-    "diffType": "changed",
-    "diffs": [
-      false,
-      true
-    ]
+  {
+    "key": "checked",
+    "type": "CHANGED",
+    "value1": false,
+    "value2": true
   },
-  "default": {
-    "diffType": "changed",
-    "diffs": [
-      null,
-      [
-        "value1",
-        "value2"
-      ]
-    ]
-  },
-  "id": {
-    "diffType": "changed",
-    "diffs": [
-      45,
-      null
-    ]
-  },
-  "key1": {
-    "diffType": "removed",
-    "diffs": [
-      "value1"
-    ]
-  },
-  "key2": {
-    "diffType": "added",
-    "diffs": [
+  {
+    "key": "default",
+    "type": "CHANGED",
+    "value2": [
+      "value1",
       "value2"
     ]
   },
-  "numbers1": {
-    "diffType": "unchanged",
-    "diffs": [
-      [
-        1,
-        2,
-        3,
-        4
-      ]
+  {
+    "key": "id",
+    "type": "CHANGED",
+    "value1": 45
+  },
+  {
+    "key": "key1",
+    "type": "DELETED",
+    "value": "value1"
+  },
+  {
+    "key": "key2",
+    "type": "ADDED",
+    "value": "value2"
+  },
+  {
+    "key": "numbers1",
+    "type": "UNCHANGED",
+    "value": [
+      1,
+      2,
+      3,
+      4
     ]
   },
-  "numbers2": {
-    "diffType": "changed",
-    "diffs": [
-      [
-        2,
-        3,
-        4,
-        5
-      ],
-      [
-        22,
-        33,
-        44,
-        55
-      ]
+  {
+    "key": "numbers2",
+    "type": "CHANGED",
+    "value1": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "value2": [
+      22,
+      33,
+      44,
+      55
     ]
   },
-  "numbers3": {
-    "diffType": "removed",
-    "diffs": [
-      [
-        3,
-        4,
-        5
-      ]
+  {
+    "key": "numbers3",
+    "type": "DELETED",
+    "value": [
+      3,
+      4,
+      5
     ]
   },
-  "numbers4": {
-    "diffType": "added",
-    "diffs": [
-      [
-        4,
-        5,
-        6
-      ]
+  {
+    "key": "numbers4",
+    "type": "ADDED",
+    "value": [
+      4,
+      5,
+      6
     ]
   },
-  "obj1": {
-    "diffType": "added",
-    "diffs": [
-      {
-        "nestedKey": "value",
-        "isNested": true
-      }
-    ]
+  {
+    "key": "obj1",
+    "type": "ADDED",
+    "value": {
+      "nestedKey": "value",
+      "isNested": true
+    }
   },
-  "setting1": {
-    "diffType": "changed",
-    "diffs": [
-      "Some value",
-      "Another value"
-    ]
+  {
+    "key": "setting1",
+    "type": "CHANGED",
+    "value1": "Some value",
+    "value2": "Another value"
   },
-  "setting2": {
-    "diffType": "changed",
-    "diffs": [
-      200,
-      300
-    ]
+  {
+    "key": "setting2",
+    "type": "CHANGED",
+    "value1": 200,
+    "value2": 300
   },
-  "setting3": {
-    "diffType": "changed",
-    "diffs": [
-      true,
-      "none"
-    ]
+  {
+    "key": "setting3",
+    "type": "CHANGED",
+    "value1": true,
+    "value2": "none"
   }
-}
+]

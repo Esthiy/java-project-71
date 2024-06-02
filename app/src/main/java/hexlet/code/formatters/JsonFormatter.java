@@ -1,19 +1,19 @@
 package hexlet.code.formatters;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import hexlet.code.Difference;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-
-import static java.util.Objects.isNull;
+import java.util.Map;
 
 public class JsonFormatter {
 
-    protected static String toFormat(LinkedHashMap<String, List<Difference>> diffsMap) {
-        var jsonDiffsMap = new LinkedHashMap<String, JsonDifference>();
-        diffsMap.keySet().forEach(key -> jsonDiffsMap.put(key, new JsonDifference(diffsMap.get(key))));
+    protected static String toFormat(LinkedHashMap<String, List<Map<String, Object>>> diffsMap) {
+        var jsonDiffsMap = new ArrayList<JsonDifference>();
+        diffsMap.keySet().forEach(key -> jsonDiffsMap.add(new JsonDifference(key, diffsMap.get(key))));
         String result;
         try {
             result = new ObjectMapper().writeValueAsString(jsonDiffsMap);
@@ -23,31 +23,52 @@ public class JsonFormatter {
         return result;
     }
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     protected static class JsonDifference {
 
+        private final String key;
+        private final String type;
+        private Object value;
+        private Object value1;
+        private Object value2;
 
-        private final String diffType;
-        private final List<Object> diffs;
-
-        protected JsonDifference(List<Difference> differenceList) {
-            if (differenceList.stream().anyMatch(it -> isNull(it.isLineAdded()))) {
-                diffType = "unchanged";
-            } else if (differenceList.stream().allMatch(Difference::isLineAdded)) {
-                diffType = "added";
-            } else if (differenceList.stream().noneMatch(Difference::isLineAdded)) {
-                diffType = "removed";
+        protected JsonDifference(String key, List<Map<String, Object>> diffList) {
+            this.key = key;
+            if (diffList.size() > 1) {
+                type = "CHANGED";
+                value1 = diffList.get(0).values().iterator().next();
+                value2 = diffList.get(1).values().iterator().next();
             } else {
-                diffType = "changed";
+                type = diffList.get(0).keySet().iterator().next();
+                value = diffList.get(0).values().iterator().next();
             }
-            this.diffs = differenceList.stream().map(Difference::diffValue).toList();
         }
 
-        public String getDiffType() {
-            return diffType;
+        public String getKey() {
+            return key;
         }
 
-        public List<Object> getDiffs() {
-            return diffs;
+        public String getType() {
+            return type;
+        }
+
+        public Object getValue() {
+            return value;
+        }
+
+        public Object getValue1() {
+            return value1;
+        }
+
+        public Object getValue2() {
+            return value2;
         }
     }
+
+//    {
+//            "key": "id",
+//            "type": "CHANGED",
+//            "value1": 45,
+//            "value2": null
+//    }
 }
